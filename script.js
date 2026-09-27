@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ---------- Navbar shadow on scroll ---------- */
     const navbar = document.querySelector('.navbar');
     const backToTop = document.querySelector('.back-to-top');
+    const scrollProgress = document.getElementById('scrollProgress');
     function onScroll() {
         if (window.scrollY > 40) {
             navbar.classList.add('scrolled');
@@ -13,9 +14,33 @@ document.addEventListener('DOMContentLoaded', function () {
             if (window.scrollY > 500) backToTop.classList.add('show');
             else backToTop.classList.remove('show');
         }
+        if (scrollProgress) {
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+            scrollProgress.style.width = pct + '%';
+        }
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+
+    /* ---------- Scrollspy: highlight active nav link ---------- */
+    const navLinks = Array.from(document.querySelectorAll('.navbar nav ul > li > a[href^="#"]'));
+    const spySections = navLinks
+        .map(function (link) { return document.querySelector(link.getAttribute('href')); })
+        .filter(Boolean);
+    if ('IntersectionObserver' in window && spySections.length) {
+        const spyIo = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    const id = '#' + entry.target.id;
+                    navLinks.forEach(function (link) {
+                        link.classList.toggle('active', link.getAttribute('href') === id);
+                    });
+                }
+            });
+        }, { threshold: 0, rootMargin: '-45% 0px -50% 0px' });
+        spySections.forEach(function (section) { spyIo.observe(section); });
+    }
 
     if (backToTop) {
         backToTop.addEventListener('click', function () {
@@ -91,6 +116,63 @@ document.addEventListener('DOMContentLoaded', function () {
         }, { threshold: 0.5 });
         counters.forEach(function (el) { counterIo.observe(el); });
     }
+
+    /* ---------- Gallery lightbox ---------- */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    function openLightbox(item) {
+        const img = item.querySelector('img');
+        const captionEl = item.querySelector('.gallery-overlay span');
+        if (!img || !lightbox) return;
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightboxCaption.textContent = captionEl ? captionEl.textContent : '';
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        lightbox.classList.remove('open');
+        lightboxImg.src = '';
+        document.body.style.overflow = '';
+    }
+    document.querySelectorAll('.gallery-item').forEach(function (item) {
+        item.addEventListener('click', function () { openLightbox(item); });
+        item.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openLightbox(item);
+            }
+        });
+    });
+    if (lightbox) {
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', function (e) {
+            if (e.target === lightbox) closeLightbox();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+        });
+    }
+
+    /* ---------- Live estimate request preview ---------- */
+    const propertyTypeEl = document.getElementById('propertyType');
+    const locationEl = document.getElementById('location');
+    const sqmEl = document.getElementById('sqm');
+    const prevType = document.getElementById('prevType');
+    const prevLocation = document.getElementById('prevLocation');
+    const prevSqm = document.getElementById('prevSqm');
+    function updateEstimatePreview() {
+        if (prevType && propertyTypeEl) prevType.textContent = propertyTypeEl.value || '—';
+        if (prevLocation && locationEl) prevLocation.textContent = locationEl.value.trim() || '—';
+        if (prevSqm && sqmEl) prevSqm.textContent = sqmEl.value ? sqmEl.value + ' τ.μ.' : '—';
+    }
+    [propertyTypeEl, locationEl, sqmEl].forEach(function (el) {
+        if (el) el.addEventListener('input', updateEstimatePreview);
+    });
+    updateEstimatePreview();
 
     /* ---------- FAQ accordion ---------- */
     document.querySelectorAll('.faq-question').forEach(function (btn) {

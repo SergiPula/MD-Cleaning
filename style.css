@@ -61,8 +61,15 @@ h1, h2, h3, h4 {
 .logo-text span { display: block; font-size: 0.62rem; color: var(--gold-primary); letter-spacing: 2px; font-weight: 600; }
 
 .navbar nav ul { display: flex; list-style: none; gap: 26px; align-items: center; }
-.navbar nav a { text-decoration: none; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; transition: 0.3s; }
+.navbar nav a { position: relative; text-decoration: none; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; transition: 0.3s; }
 .navbar nav a:hover { color: var(--gold-light); }
+.navbar nav ul > li > a:not(.btn-nav)::after { content: ''; position: absolute; left: 0; bottom: -6px; width: 0; height: 1px; background: var(--gold-primary); transition: width 0.25s ease; }
+.navbar nav ul > li > a:not(.btn-nav):hover::after,
+.navbar nav ul > li > a:not(.btn-nav).active::after { width: 100%; }
+.navbar nav ul > li > a.active { color: var(--gold-light); }
+
+/* ---------- Scroll progress bar ---------- */
+.scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: linear-gradient(90deg, var(--gold-primary), var(--gold-light)); z-index: 1200; }
 .btn-nav { border: 1px solid var(--gold-primary); padding: 8px 18px; border-radius: 4px; color: var(--gold-primary) !important; font-weight: 600 !important; }
 .btn-nav:hover { background: var(--gold-primary); color: var(--bg-dark) !important; }
 
@@ -125,6 +132,15 @@ h1, h2, h3, h4 {
 .gallery-overlay { position: absolute; inset: 0; background: rgba(13, 13, 12, 0.8); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
 .gallery-item:hover .gallery-overlay { opacity: 1; }
 .gallery-overlay span { color: var(--gold-light); font-size: 1.2rem; font-weight: 700; }
+.gallery-item { cursor: zoom-in; }
+
+/* ---------- Lightbox ---------- */
+.lightbox { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(13, 13, 12, 0.94); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 1300; padding: 30px; }
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 90vw; max-height: 78vh; border-radius: 8px; border: 1px solid var(--border-color); }
+.lightbox-caption { color: var(--gold-light); margin-top: 18px; font-size: 1.05rem; font-weight: 600; }
+.lightbox-close { position: absolute; top: 22px; right: 22px; width: 42px; height: 42px; border-radius: 50%; background: none; border: 1px solid var(--gold-primary); color: var(--gold-light); font-size: 1.5rem; line-height: 1; cursor: pointer; transition: 0.3s; }
+.lightbox-close:hover { background: var(--gold-primary); color: var(--bg-dark); }
 
 /* ---------- About ---------- */
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; max-width: 1100px; margin: 0 auto; }
@@ -140,7 +156,14 @@ h1, h2, h3, h4 {
 /* ---------- FAQ Accordion ---------- */
 .faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 .faq-item { background: var(--panel-card); border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; }
-.faq-question { width: 100%; padding: 20px; background: none; border: none; color: var(--text-light); text-align: left; font-size: 1.05rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-main); }
+.faq-question { width: 100%; padding: 20px; background: none; border: none; color: var(--text-light); text-align: left; font-size: 1.05rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-family: var(--font-main); }
+.faq-question h4 { font-size: 1.05rem; font-weight: 700; }
+.faq-icon { position: relative; width: 18px; height: 18px; flex-shrink: 0; }
+.faq-icon::before, .faq-icon::after { content: ''; position: absolute; top: 50%; left: 50%; background: var(--gold-primary); transform: translate(-50%, -50%); transition: transform 0.3s ease, opacity 0.3s ease; }
+.faq-icon::before { width: 14px; height: 2px; }
+.faq-icon::after { width: 2px; height: 14px; }
+.faq-item.open .faq-icon::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+.faq-item.open .faq-question h4 { color: var(--gold-light); }
 .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; padding: 0 20px; }
 .faq-item.open .faq-answer { max-height: 200px; padding: 0 20px 20px; }
 
@@ -151,6 +174,12 @@ h1, h2, h3, h4 {
 .estimator-form input, .estimator-form select { padding: 12px; background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-light); border-radius: 4px; font-family: var(--font-main); }
 .estimator-form input:focus, .estimator-form select:focus { outline: none; border-color: var(--gold-primary); }
 
+.estimate-preview { margin-top: 8px; margin-bottom: 22px; padding: 16px 18px; background: var(--bg-dark); border-left: 2px solid var(--gold-primary); border-radius: 4px; }
+.estimate-preview h4 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold-light); margin-bottom: 10px; font-weight: 700; }
+.estimate-preview p { font-size: 0.92rem; color: var(--text-muted); margin-bottom: 4px; }
+.estimate-preview p strong { color: var(--text-light); font-weight: 600; }
+.estimate-preview .estimate-note { margin-top: 8px; font-size: 0.78rem; color: var(--text-muted); opacity: 0.75; font-style: italic; }
+
 /* ---------- Back To Top Button ---------- */
 .back-to-top {
     position: fixed; right: 24px; bottom: 80px; width: 44px; height: 44px;
@@ -160,6 +189,21 @@ h1, h2, h3, h4 {
 }
 .back-to-top.show { opacity: 1; visibility: visible; }
 .back-to-top:hover { background: var(--gold-light); }
+
+/* ---------- Floating WhatsApp button (desktop) ---------- */
+.fab-whatsapp {
+    position: fixed; right: 24px; bottom: 140px; width: 56px; height: 56px; border-radius: 50%;
+    background: #25D366; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35); z-index: 999; animation: fabPulse 2.6s ease-in-out infinite;
+    transition: transform 0.25s ease;
+}
+.fab-whatsapp:hover { transform: scale(1.08); }
+.fab-whatsapp svg { width: 28px; height: 28px; fill: #fff; }
+@keyframes fabPulse {
+    0%, 100% { box-shadow: 0 6px 18px rgba(37,211,102,0.35); }
+    50% { box-shadow: 0 6px 26px rgba(37,211,102,0.65); }
+}
+@media (max-width: 768px) { .fab-whatsapp { display: none; } }
 
 /* ---------- Contact & Footer ---------- */
 .contact-wrap { text-align: center; }
