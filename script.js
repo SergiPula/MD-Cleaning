@@ -265,3 +265,13 @@ document.addEventListener('DOMContentLoaded', function () {
         b.addEventListener('pointerleave', function () { b.style.transform = ''; });
     });
 });
+
+document.addEventListener('DOMContentLoaded',function(){
+    var ph=document.querySelector('.hero-photo'),hero=document.querySelector('.hero');
+    if(ph&&hero&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        hero.addEventListener('pointermove',function(e){
+            var x=e.clientX/window.innerWidth-0.5,y=e.clientY/window.innerHeight-0.5;
+            ph.style.transform='translate('+(-x*16)+'px,'+(-y*12)+'px)';
+        });
+    }
+});
