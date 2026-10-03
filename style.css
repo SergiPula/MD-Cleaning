@@ -324,3 +324,7 @@ h3,h4{font-family:var(--sans);font-weight:700;letter-spacing:0;line-height:1.35}
 @keyframes arcdraw{to{stroke-dasharray:62 38}}
 @keyframes arcdraw2{to{stroke-dasharray:26 74}}
 @media (prefers-reduced-motion:reduce){.arc.a1{stroke-dasharray:62 38}.arc.a2{stroke-dasharray:26 74}}
+
+/* V4.1: before/after slider drag fix */
+.ba{touch-action:pan-y;cursor:ew-resize}
+.ba input{pointer-events:none}

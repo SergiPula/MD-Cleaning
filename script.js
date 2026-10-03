@@ -275,3 +275,30 @@ document.addEventListener('DOMContentLoaded',function(){
         });
     }
 });
+
+/* Before / after slider: drag with mouse/finger, or use arrow keys */
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.ba').forEach(function (ba) {
+        var range = ba.querySelector('input');
+        var dragging = false;
+        function setPos(pct) {
+            pct = Math.max(0, Math.min(100, pct));
+            ba.style.setProperty('--p', pct + '%');
+            if (range) range.value = pct;
+        }
+        function fromEvent(e) {
+            var r = ba.getBoundingClientRect();
+            setPos(((e.clientX - r.left) / r.width) * 100);
+        }
+        ba.addEventListener('pointerdown', function (e) {
+            dragging = true;
+            try { ba.setPointerCapture(e.pointerId); } catch (err) {}
+            fromEvent(e);
+        });
+        ba.addEventListener('pointermove', function (e) { if (dragging) fromEvent(e); });
+        ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) {
+            ba.addEventListener(t, function () { dragging = false; });
+        });
+        if (range) range.addEventListener('input', function () { setPos(parseFloat(range.value)); });
+    });
+});
