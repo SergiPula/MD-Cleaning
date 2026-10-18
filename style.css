@@ -9,7 +9,7 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.75;padding-bottom:54px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4{font-family:var(--serif);color:var(--cream);font-weight:700;letter-spacing:-.01em;line-height:1.2}
-a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,.gallery-item:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.gallery-item:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
 .container{max-width:1200px;margin:0 auto}
 .sub-title{display:block;color:var(--em);font-size:.8rem;font-weight:800;letter-spacing:2.5px;margin-bottom:10px}
 
@@ -163,8 +163,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,.g
 .estimator-form{max-width:560px;margin:0 auto;padding:38px}
 .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
 .form-group label{font-size:.88rem;color:var(--cream);font-weight:700}
-.estimator-form input,.estimator-form select{padding:13px 14px;background:rgba(3,16,11,.8);border:1px solid var(--line);color:var(--cream);border-radius:10px;font-family:var(--sans);font-size:.95rem;transition:.3s}
-.estimator-form input:focus,.estimator-form select:focus{outline:none;border-color:var(--em);box-shadow:0 0 0 3px rgba(61,220,151,.18),0 0 24px rgba(61,220,151,.2)}
+.estimator-form input,.estimator-form select,.estimator-form textarea{padding:13px 14px;background:rgba(3,16,11,.8);border:1px solid var(--line);color:var(--cream);border-radius:10px;font-family:var(--sans);font-size:.95rem;transition:.3s}
+.estimator-form input:focus,.estimator-form select:focus,.estimator-form textarea:focus{outline:none;border-color:var(--em);box-shadow:0 0 0 3px rgba(61,220,151,.18),0 0 24px rgba(61,220,151,.2)}
 .estimate-preview{margin:8px 0 22px;padding:16px 18px;background:rgba(3,16,11,.8);border-left:2px solid var(--em);border-radius:8px;box-shadow:-8px 0 24px -12px var(--em)}
 .estimate-preview h4{font-family:var(--sans);font-size:.82rem;letter-spacing:1.5px;color:var(--mint);margin-bottom:10px}
 .estimate-preview p{font-size:.92rem;margin-bottom:4px}
@@ -328,3 +328,14 @@ h3,h4{font-family:var(--sans);font-weight:700;letter-spacing:0;line-height:1.35}
 /* V4.1: before/after slider drag fix */
 .ba{touch-action:pan-y;cursor:ew-resize}
 .ba input{pointer-events:none}
+
+/* Form: textarea + legal links */
+.estimator-form textarea{resize:vertical;min-height:84px;line-height:1.5}
+.foot-legal{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 22px;margin-top:10px}
+.foot-legal a{font-size:.85rem}
+
+/* Back-to-top: smaller and out of the way of text on phones */
+@media (max-width:768px){
+ .back-to-top{width:36px;height:36px;right:10px;bottom:66px;font-size:1rem;background:rgba(3,16,11,.7);box-shadow:none}
+ .back-to-top.show{opacity:.8}
+}

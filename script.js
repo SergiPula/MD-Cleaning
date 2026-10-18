@@ -161,15 +161,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const propertyTypeEl = document.getElementById('propertyType');
     const locationEl = document.getElementById('location');
     const sqmEl = document.getElementById('sqm');
+    const serviceEl = document.getElementById('serviceType');
+    const prevService = document.getElementById('prevService');
     const prevType = document.getElementById('prevType');
     const prevLocation = document.getElementById('prevLocation');
     const prevSqm = document.getElementById('prevSqm');
     function updateEstimatePreview() {
+        if (prevService && serviceEl) prevService.textContent = serviceEl.value || '—';
         if (prevType && propertyTypeEl) prevType.textContent = propertyTypeEl.value || '—';
         if (prevLocation && locationEl) prevLocation.textContent = locationEl.value.trim() || '—';
         if (prevSqm && sqmEl) prevSqm.textContent = sqmEl.value ? sqmEl.value + ' τ.μ.' : '—';
     }
-    [propertyTypeEl, locationEl, sqmEl].forEach(function (el) {
+    [serviceEl, propertyTypeEl, locationEl, sqmEl].forEach(function (el) {
         if (el) el.addEventListener('input', updateEstimatePreview);
     });
     updateEstimatePreview();
